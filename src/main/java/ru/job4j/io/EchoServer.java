@@ -16,9 +16,13 @@ public class EchoServer {
                     for (String str = in.readLine(); str != null && !str.isEmpty(); str = in.readLine()) {
                         System.out.println(str);
                         if (str.startsWith("GET /?msg=")) {
-                            String s = str.substring(10, 13);
-                            if ("Bye".equals(s)) {
+                            if ("Hello".equals(str.substring(10, 15))) {
+                                out.write("Hello\r\n".getBytes());
+                            } else
+                            if ("Bye".equals(str.substring(10, 13))) {
                                 server.close();
+                            } else {
+                                out.write("What\r\n".getBytes());
                             }
                         }
                     }
