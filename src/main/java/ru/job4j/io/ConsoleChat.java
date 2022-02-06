@@ -34,8 +34,8 @@ public class ConsoleChat {
         System.out.println("------------------------------");
         System.out.print("you>");
         say = scanner.nextLine();
+        log.add("you>" + say);
         while (!OUT.equals(say)) {
-            log.add("you>" + say);
             if (STOP.equals(say)) {
                 isStop = true;
             }
@@ -50,6 +50,7 @@ public class ConsoleChat {
             }
             System.out.print("you>");
             say = scanner.nextLine();
+            log.add("you>" + say);
         }
         System.out.print("--------- закончить ----------");
         saveLog(log);
