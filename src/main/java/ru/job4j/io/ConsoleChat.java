@@ -8,12 +8,11 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class ConsoleChat {
-
-    private final String path;
-    private final String botAnswers;
     private static final String OUT = "закончить";
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
+    private final String path;
+    private final String botAnswers;
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
