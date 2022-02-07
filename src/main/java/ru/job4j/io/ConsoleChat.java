@@ -23,7 +23,7 @@ public class ConsoleChat {
     public void run() {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        List<String> log = new ArrayList<String>();
+        List<String> log = new ArrayList<>();
         String say;
         List<String> answers = readPhrases();
         boolean isStop = false;
@@ -58,7 +58,7 @@ public class ConsoleChat {
 
     private List<String> readPhrases() {
         List<String> phrases = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(path, Charset.forName("UTF-8")))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(botAnswers, Charset.forName("UTF-8")))) {
             br.lines().forEach(phrases::add);
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class ConsoleChat {
 
     private void saveLog(List<String> log) {
         try (PrintWriter pw = new PrintWriter(
-                new FileWriter(botAnswers, Charset.forName("UTF-8"), true))) {
+                new FileWriter(path, Charset.forName("UTF-8"), true))) {
             log.forEach(pw::println);
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class ConsoleChat {
     }
 
     public static void main(String[] args) {
-        ConsoleChat cc = new ConsoleChat("./data/answers.txt", "./data/chat.log");
+        ConsoleChat cc = new ConsoleChat("./data/chat.log", "./data/answers.txt");
         cc.run();
     }
 }
