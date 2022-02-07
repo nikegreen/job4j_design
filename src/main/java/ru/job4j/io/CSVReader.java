@@ -86,6 +86,8 @@ public class CSVReader {
                 }
                 pw.println();
             }
+            pw.flush();
+            pw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
