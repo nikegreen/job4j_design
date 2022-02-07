@@ -20,15 +20,12 @@ public class EchoServer {
                     out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                     for (String str = in.readLine(); str != null && !str.isEmpty(); str = in.readLine()) {
                         System.out.println(str);
-                        if (str.startsWith("GET /?msg=")) {
-                            if ("Hello".equals(str.substring(10, 15))) {
-                                out.write("Hello\r\n".getBytes());
-                            } else
-                            if ("Bye".equals(str.substring(10, 13))) {
-                                server.close();
-                            } else {
-                                out.write("What\r\n".getBytes());
-                            }
+                        if (str.contains("?msg=Hello ")) {
+                            out.write("Hello\r\n".getBytes());
+                        } else if (str.contains("?msg=Bye ")) {
+                            server.close();
+                        } else if (str.contains("?msg=")) {
+                            out.write("What\r\n".getBytes());
                         }
                     }
                     out.flush();
