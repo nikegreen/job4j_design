@@ -8,6 +8,11 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CSVReader {
+    /**
+     * validate - проверяет параметры, вызывается из public static void handle(ArgsName argsName)
+     * @param argsName - аргументы -ключ=значение
+     * @throws IllegalArgumentException - получаем если аргументы отсутствуют или неправильный формат
+     */
     public static void validate(ArgsName argsName) throws IllegalArgumentException {
         String path = argsName.get("path");
         if (!Files.exists(Paths.get(path))) {
@@ -16,8 +21,8 @@ public class CSVReader {
         if (Files.isDirectory(Paths.get(path))) {
             throw new IllegalArgumentException("нужно имя исходного файла, а не каталог (" + path + ")");
         }
-        String delimiter = argsName.get("delimiter");
-        String out = argsName.get("out");
+        argsName.get("delimiter");
+        argsName.get("out");
         String filter = argsName.get("filter");
         List<String> filters = List.of(filter.split(","));
         if (filter.length() == 0 || filters.size() == 0) {
@@ -37,6 +42,7 @@ public class CSVReader {
  * out - путь и имя .csv файла с результатом
  * filter - имена столбцов, которые нужно скопировать (перечислены через символ ',')
  */
+
     public static void handle(ArgsName argsName) {
         try {
             validate(argsName);
