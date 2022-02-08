@@ -1,66 +1,38 @@
 package ru.job4j.serialization.xml;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.*;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+@XmlRootElement(name = "InternetBox")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class InternetBox {
-
-    class Addr {
-        private String country;
-        private String city;
-        private String street;
-        private int home;
-
-        public Addr(String country, String city, String street, int home) {
-            this.country = country;
-            this.city = city;
-            this.street = street;
-            this.home = home;
-        }
-
-        public String getCountry() {
-            return country;
-        }
-
-        public void setCountry(String country) {
-            this.country = country;
-        }
-
-        public String getCity() {
-            return city;
-        }
-
-        public void setCity(String city) {
-            this.city = city;
-        }
-
-        public String getStreet() {
-            return street;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
-        }
-
-        public int getHome() {
-            return home;
-        }
-
-        public void setHome(int home) {
-            this.home = home;
-        }
-
-    }
-
+    @XmlAttribute
     private boolean delivered;
+
+    @XmlAttribute
     private int weight;
+
+    @XmlAttribute
     private String postCompany;
     private Addr addr;
+
+    @XmlElementWrapper(name = "descriptions")
+    @XmlElement(name = "description")
     private String[] descriptions;
 
+    public InternetBox() {
+
+    }
     public InternetBox(
             boolean delivered,
             int weight,
             String postCompany,
             Addr addr,
-            String[] descriptions) {
+            String... descriptions) {
         this.delivered = delivered;
         this.weight = weight;
         this.postCompany = postCompany;
@@ -106,5 +78,33 @@ public class InternetBox {
 
     public void setDescriptions(String[]  descriptions) {
         this.descriptions = descriptions;
+    }
+
+    public static void main(String[] args)  throws Exception {
+        InternetBox internetBox = new InternetBox(false,
+                3123,
+                "Почта России",
+                new Addr("Россия", "Урюпинск", "Ленина", 1),
+                "Заказное", "Срочное");
+        /* Получаем контекст для доступа к АПИ */
+        JAXBContext context = JAXBContext.newInstance(InternetBox.class);
+        /* Создаем сериализатор */
+        Marshaller marshaller = context.createMarshaller();
+        /* Указываем, что нам нужно форматирование */
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        String xml;
+        try (StringWriter writer = new StringWriter()) {
+            /* Сериализуем */
+            marshaller.marshal(internetBox, writer);
+            xml = writer.getBuffer().toString();
+            System.out.println(xml);
+        }
+        /* Для десериализации нам нужно создать десериализатор */
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+        try (StringReader reader = new StringReader(xml)) {
+            /* десериализуем */
+            InternetBox result = (InternetBox) unmarshaller.unmarshal(reader);
+            System.out.println(result);
+        }
     }
 }
