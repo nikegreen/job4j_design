@@ -34,7 +34,7 @@ public class Zip {
         String dest = argsName.get("o");
         Path destPath = Paths.get(dest);
 
-        SearchFiles searchFiles = new SearchFiles(f -> !f.endsWith(exclude));
+        SearchFiles searchFiles = new SearchFiles(f -> !f.toString().endsWith(exclude));
         Files.walkFileTree(sourcePath, searchFiles);
         packFiles(searchFiles.getPaths(), destPath);
         searchFiles.getPaths().forEach(System.out::println);
