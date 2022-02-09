@@ -19,9 +19,9 @@ public class Zip {
         if (!Files.isDirectory(sourcePath)) {
             throw new  IllegalArgumentException("Не директория");
         }
-        exclude = "." + argsName.get("e");
-        if (exclude.charAt(1) == '.') {
-            throw new  IllegalArgumentException("Расширение файла не должно начинаться с '.'");
+        exclude = argsName.get("e");
+        if (!exclude.startsWith(".")) {
+            exclude = "." + exclude;
         }
         destPath = Paths.get(argsName.get("o"));
     }
