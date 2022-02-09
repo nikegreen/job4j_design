@@ -33,7 +33,6 @@ public class Contact {
     @Override
     public String toString() {
         return "Contact{"
-                + "phoneNumber='" + phoneNumber + '\''
-                + ", name='" + name + '\'' + '}';
+                + "phoneNumber='" + phoneNumber + "', name='" + name + "'}";
     }
 }

@@ -21,6 +21,46 @@ public class Smartphone {
         this.contacts = contacts;
     }
 
+    public boolean isPowerOn() {
+        return powerOn;
+    }
+
+    public void setPowerOn(boolean powerOn) {
+        this.powerOn = powerOn;
+    }
+
+    public int getMemory() {
+        return memory;
+    }
+
+    public void setMemory(int memory) {
+        this.memory = memory;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Display getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(Display display) {
+        this.display = display;
+    }
+
+    public Contact[] getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Contact[] contacts) {
+        this.contacts = contacts;
+    }
+
     @Override
     public String toString() {
         return "Smartphone{"
