@@ -9,6 +9,22 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
+    private static Path destPath;
+    private static String exclude;
+    private static Path sourcePath;
+
+    public static void validate(String[] args) {
+        ArgsName argsName = ArgsName.of(args);
+        sourcePath = Paths.get(argsName.get("d"));
+        if (!Files.isDirectory(sourcePath)) {
+            throw new  IllegalArgumentException("Не директория");
+        }
+        exclude = "." + argsName.get("e");
+        if (exclude.charAt(1) == '.') {
+            throw new  IllegalArgumentException("Расширение файла не должно начинаться с '.'");
+        }
+        destPath = Paths.get(argsName.get("o"));
+    }
 
     public static void packFiles(List<Path> sources, Path target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target.toFile())))) {
@@ -24,16 +40,7 @@ public class Zip {
     }
 
     public static void main(String[] args) throws IOException {
-        ArgsName argsName = ArgsName.of(args);
-        String source = argsName.get("d");
-        Path sourcePath = Paths.get(source);
-        if (!Files.isDirectory(sourcePath)) {
-            throw new  IllegalArgumentException("Не директория");
-        }
-        String exclude = "." + argsName.get("e");
-        String dest = argsName.get("o");
-        Path destPath = Paths.get(dest);
-
+        validate(args);
         SearchFiles searchFiles = new SearchFiles(f -> !f.toString().endsWith(exclude));
         Files.walkFileTree(sourcePath, searchFiles);
         packFiles(searchFiles.getPaths(), destPath);
