@@ -19,6 +19,7 @@ public class Find {
     private static int type;
     private static String out;
     private static Predicate<Path> condition;
+    private static Pattern pattern;
 
     private static void validate(String[] args) {
         ArgsName argsName = ArgsName.of(args);
@@ -31,15 +32,18 @@ public class Find {
         String typeStr = argsName.get("t");
         PathMatcher matcher;
         switch (typeStr) {
-            case "file":
+            case "name":
                 condition = f -> mask.equals(f.getFileName().toString());
                 break;
             case "mask":
-                matcher = FileSystems.getDefault().getPathMatcher("glob:" + mask);
-                condition = f -> matcher.matches(f);
+                pattern = Pattern.compile(
+                        mask.replace(".", "\\.")
+                            .replace("*", ".*"));
+                condition = f -> pattern.matcher(f.toString()).find();
                 break;
             case "regex":
-                condition = f -> matches(mask, f.toString());
+                pattern = Pattern.compile(mask);
+                condition = f -> pattern.matcher(f.toString()).find();
                 break;
             default:
                 throw new IllegalArgumentException("недопустимый тип ключа -t (" + typeStr + ")");
