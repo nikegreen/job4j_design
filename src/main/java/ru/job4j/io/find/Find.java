@@ -2,7 +2,6 @@ package ru.job4j.io.find;
 
 import ru.job4j.io.ArgsName;
 import ru.job4j.io.Search;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,8 +9,6 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.matches;
 
 public class Find {
     private static Path path;
@@ -38,7 +35,8 @@ public class Find {
             case "mask":
                 pattern = Pattern.compile(
                         mask.replace(".", "\\.")
-                            .replace("*", ".*"));
+                            .replace("*", ".*")
+                            .replace("?", "."));
                 condition = f -> pattern.matcher(f.toString()).find();
                 break;
             case "regex":
