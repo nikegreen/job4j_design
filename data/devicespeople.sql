@@ -39,17 +39,25 @@ join devices
 on devices.id = devices_people.device_id;
 
 -- средняя цена всех устройств у каждого человека 
-select avg(devices.price) 
+select avg(devices.price) as average, people.name as people_name
 from devices_people 
+join people
+on people.id = devices_people.people_id
 join devices 
 on devices.id = devices_people.device_id 
-group by people_id;
+group by people.name;
 
 -- средняя цена всех устройств у каждого человека и больше 5000
-select avg(devices.price)
+select avg(devices.price) as average, people.name as people_name
 from devices_people
+join people
+on people.id = devices_people.people_id
 join devices 
 on devices.id = devices_people.device_id
-group by people_id
+group by people.name
 having avg(devices.price) > 5000;
+
+
+
+
 
