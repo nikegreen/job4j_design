@@ -1,25 +1,44 @@
-create table senders (
+drop table postalParcel;
+drop table people cascade;
+
+create table people(
     id serial primary key,
-    name text,
-    outbox_id int
+    name varchar(255)
 );
 
-create table receivers (
+create table postalParcel(
     id serial primary key,
-    name text,
-    inbox_id int
+    description varchar(255),
+    price float,
+	sender_id int references people(id),
+	receiver_id int references people(id)
 );
 
-insert into senders (name, outbox_id) values ('ivan',1204);
-insert into senders (name, outbox_id) values ('misha',201);
-insert into senders (name, outbox_id) values ('oleg',320);
+insert into people (name) values ('Sveta');
+insert into people (name) values ('Lena');
+insert into people (name) values ('Misha');
+insert into people (name) values ('Oleg');
+insert into people (name) values ('Petr');
 
-insert into receivers (name, inbox_id) values ('sveta',127);
-insert into receivers (name, inbox_id) values ('lena',201);
-insert into receivers (name, inbox_id) values ('misha',320);
+insert into postalParcel (description, price, sender_id, receiver_id) values ('smartphone',1204,1,2);
+insert into postalParcel (description, price, sender_id, receiver_id) values ('walkman',201,1,4);
+insert into postalParcel (description, price, sender_id, receiver_id) values ('web-camera',120,4,1);
+insert into postalParcel (description, price, sender_id, receiver_id) values ('mixer',50,2,5);
 
-select senders.name as sender, senders.outbox_id as box_id, receivers.name as receiver
-from senders join  receivers
-on senders.outbox_id = receivers.inbox_id;
+-- список отправителей посылки
+select people.name as senders, postalParcel.description as description
+from postalParcel
+join people
+on postalParcel.sender_id = people.id;
+
+-- список получателей посылки
+select people.name as receivers, postalParcel.description as description
+from postalParcel
+join people
+on postalParcel.receiver_id = people.id;
+
+-- список всех посылок
+select description, price from postalParcel;
+
 
 
