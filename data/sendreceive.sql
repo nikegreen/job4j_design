@@ -38,7 +38,8 @@ join people
 on postalParcel.receiver_id = people.id;
 
 -- список всех посылок
-select description, price from postalParcel;
-
-
-
+select postalParcel.id, description, price, people2.name as sender, people3.name as receiver from postalParcel
+join people as people2
+on postalParcel.sender_id = people2.id
+join people as people3
+on postalParcel.receiver_id = people3.id;
