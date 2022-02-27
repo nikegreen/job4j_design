@@ -19,15 +19,16 @@ public class ImportDB {
         this.dump = dump;
     }
 
-    public List<User> load() throws IOException {
+    public List<User> load() {
         List<User> users = new ArrayList<>();
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
             rd.lines().forEach(line -> {
                 String[] str = line.split(";");
-                if (str.length == 2) {
+                if (str.length == 2 && str[0].trim().length() > 0 && str[1].trim().length() > 0) {
                     users.add(new User(str[0], str[1]));
                 }
             });
+        } catch (IOException e) {
         }
         return users;
     }
