@@ -9,6 +9,7 @@ import java.util.StringJoiner;
 public class TableEditor implements AutoCloseable {
     private Connection connection;
     private Properties properties;
+    private Statement statement;
 
     public TableEditor(Properties properties) {
         this.properties = properties;
@@ -22,6 +23,7 @@ public class TableEditor implements AutoCloseable {
             String login = properties.getProperty("login", "postgres");
             String password = properties.getProperty("password", "password");
             connection = DriverManager.getConnection(url, login, password);
+            statement = connection.createStatement();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -31,64 +33,54 @@ public class TableEditor implements AutoCloseable {
 
     public void createTable(String tableName) throws SQLException {
         throwSqlException();
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format(
-                    "create table if not exists %s(id serial primary key);", tableName
-            );
-            statement.execute(sql);
-        }
+        String sql = String.format(
+                "create table if not exists %s(id serial primary key);", tableName
+        );
+        statement.execute(sql);
     }
 
     public void dropTable(String tableName) throws SQLException {
         throwSqlException();
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format(
-                    "drop table if exists %s;", tableName
-            );
-            statement.execute(sql);
-        }
+        String sql = String.format(
+                "drop table if exists %s;", tableName
+        );
+        statement.execute(sql);
     }
 
     public void addColumn(String tableName, String columnName, String type) throws SQLException {
         throwSqlException();
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format(
-                    "ALTER TABLE %s ADD COLUMN %s %s;",
-                    tableName,
-                    columnName,
-                    type
-            );
-            statement.execute(sql);
-        }
+        String sql = String.format(
+                "ALTER TABLE %s ADD COLUMN %s %s;",
+                tableName,
+                columnName,
+                type
+        );
+        statement.execute(sql);
     }
 
     public void dropColumn(String tableName, String columnName) throws SQLException {
         throwSqlException();
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format(
-                    "ALTER TABLE %s DROP COLUMN %s;",
-                    tableName,
-                    columnName
-            );
-            statement.execute(sql);
-        }
+        String sql = String.format(
+                "ALTER TABLE %s DROP COLUMN %s;",
+                tableName,
+                columnName
+        );
+        statement.execute(sql);
     }
 
     public void renameColumn(String tableName, String columnName, String newColumnName) throws SQLException {
         throwSqlException();
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format(
-                    "ALTER TABLE %s RENAME COLUMN %s TO %s;",
-                    tableName,
-                    columnName,
-                    newColumnName
-            );
-            statement.execute(sql);
-        }
+        String sql = String.format(
+                "ALTER TABLE %s RENAME COLUMN %s TO %s;",
+                tableName,
+                columnName,
+                newColumnName
+        );
+        statement.execute(sql);
     }
 
     public void throwSqlException() throws SQLException {
-        if (connection == null) {
+        if (connection == null || statement == null) {
             throw new SQLException("SQL Connection is not open");
         }
     }
@@ -134,6 +126,9 @@ public class TableEditor implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
+        if (statement != null) {
+            statement.close();
+        }
         if (connection != null) {
             connection.close();
         }
