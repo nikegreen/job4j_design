@@ -24,9 +24,9 @@ public class TableEditor implements AutoCloseable {
             String password = properties.getProperty("password", "password");
             connection = DriverManager.getConnection(url, login, password);
             statement = connection.createStatement();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -135,9 +135,9 @@ public class TableEditor implements AutoCloseable {
     }
 
     public static void main(String[] args) {
-        try {
-            final String tableName = "testTable";
-            TableEditor tableEditor = new TableEditor(TableEditor.getJdbcProperties("app"));
+
+        final String tableName = "testTable";
+        try (TableEditor tableEditor = new TableEditor(TableEditor.getJdbcProperties("app"))) {
             System.out.println("Create table...");
             tableEditor.createTable(tableName);
             System.out.println(TableEditor.getTableScheme(tableEditor.getConnection(), tableName));
@@ -153,8 +153,6 @@ public class TableEditor implements AutoCloseable {
             System.out.println("Delete table...");
             tableEditor.dropTable(tableName);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
