@@ -4,8 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class ConfigTest {
     @Rule
@@ -16,8 +15,8 @@ public class ConfigTest {
         String path = "./data/pair_without_comment.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("name"), is("nikegreen"));
-        assertThat(config.value("surname"), is(""));
+        assertThat(config.value("name")).isEqualTo("nikegreen");
+        assertThat(config.value("surname")).isEqualTo("");
     }
 
     @Test(expected = NullPointerException.class)
@@ -25,9 +24,9 @@ public class ConfigTest {
         String path = "./data/pair_without_comment.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("name"), is("nikegreen"));
-        assertThat(config.value("surname"), is(""));
-        assertThat(config.value("illegalKey"), is(""));
+        assertThat(config.value("name")).isEqualTo("nikegreen");
+        assertThat(config.value("surname")).isEqualTo("");
+        assertThat(config.value("illegalKey")).isEqualTo("");
     }
 
     @Test
@@ -35,8 +34,8 @@ public class ConfigTest {
         String path = "./data/pair_with_comment.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("name"), is("nikegreen"));
-        assertThat(config.value("surname"), is(""));
+        assertThat(config.value("name")).isEqualTo("nikegreen");
+        assertThat(config.value("surname")).isEqualTo("");
     }
 
     @Test
